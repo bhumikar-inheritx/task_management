@@ -22,38 +22,15 @@ class _SignupScreenState extends State<SignupScreen> {
   late final TextEditingController numEmail;
   late final TextEditingController pass;
 
-  // Future<void> _signup() async {
-  //   if (_formkey.currentState != null && _formkey.currentState!.validate()) {
-  //
-  //     final prefs = await SharedPreferences.getInstance();
-  //     String emailOrPhone = numEmail.text.trim();
-  //
-  //     final savedEmailOrPhone = prefs.getString('emailOrPhone');
-  //     await prefs.setString('emailOrPhone', emailOrPhone);
-  //     await prefs.setBool('loggedIn', true);
-  //
-  //     if (savedEmailOrPhone != null && savedEmailOrPhone == emailOrPhone) {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(
-  //           content: Text("Already have an account from this Email/Phone"),
-  //         ),
-  //       );
-  //       return;
-  //     }
-  //     Navigator.pushReplacement(
-  //       context,
-  //       MaterialPageRoute(builder: (context) => const DashboardScreen()),
-  //     );
-  //   }
-  // }
+
 
   Future<void> _signup() async {
     if (_formkey.currentState!.validate()) {
       final prefs = await SharedPreferences.getInstance();
       String emailOrPhone = numEmail.text.trim();
 
-      // Get all users from Storage
-      final users = await Storage.getUser(); // returns List<User>
+     
+      final users = await Storage.getUser(); 
       bool alreadyExists = users.any((u) => u.emailOrPhone == emailOrPhone);
 
       if (alreadyExists) {
@@ -63,14 +40,14 @@ class _SignupScreenState extends State<SignupScreen> {
         return;
       }
 
-      // Save new user
+   
       users.add(User(emailOrPhone: emailOrPhone, task: []));
       await Storage.saveUser(users);
 
       await prefs.setString('emailOrPhone', emailOrPhone);
       await prefs.setBool('loggedIn', true);
 
-      // Load tasks in provider
+
       final taskProvider = Provider.of<TaskProvider>(context, listen: false);
       await taskProvider.loadUserTasks(emailOrPhone);
 
