@@ -53,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
         return;
       }
 
-      // Login successful
+   
       await prefs.setBool('loggedIn', true);
       await prefs.setString('emailOrPhone', emailOrPhone);
 
